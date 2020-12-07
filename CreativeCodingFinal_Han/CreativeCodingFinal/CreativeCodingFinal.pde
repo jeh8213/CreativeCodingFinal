@@ -1,3 +1,5 @@
+import processing.sound.*;
+
 //IMAGES AND FONT
 //backdrop of the first few scenes
 PImage backdrop;
@@ -19,14 +21,21 @@ PImage dog3;
 //font of all the dialogue text
 PFont comicsans;
 
-//VARIABLS
+//SOUND VARIABLES
+SoundFile traffic;
+SoundFile restaurantNoiseOne;
+SoundFile restaurantNoiseTwo;
+
+//VARIABLES
 float duckMove;
 float xDuck;
 float xDuckTwo;
 float xDuckThree;
 int num;
 int score;
-
+boolean musicStopped = false;
+boolean bgStart = false;
+boolean sceneChanged = false;
 //OBJECTS
 Dog d;
 Dialogue quote;
@@ -55,6 +64,11 @@ void setup() {
   comicsans = createFont("Comic Sans MS.ttf", 18);
   textFont(comicsans);
   
+  //load in sound files
+  traffic = new SoundFile(this, "streetnoise.wav");
+  restaurantNoiseOne = new SoundFile(this, "restaurant.wav");
+  restaurantNoiseTwo = new SoundFile(this, "fastfood.mp3");
+  
   //original position of the duck
   duckMove = 150;
   //number to indicate the scene based on user interactivity
@@ -67,9 +81,23 @@ void setup() {
 //DISPLAY CERTAIN SCENES DEPENDING ON USER INTERACTIVITY
 //keep score count in the top right of the screen
 void draw() {
+  //OUTSIDE
   if(num == 1) {
+    if(!musicStopped){
+      traffic.stop();
+      restaurantNoiseOne.stop();
+      restaurantNoiseTwo.stop();
+      musicStopped = true;
+      sceneChanged = false;
+      bgStart = false;
+    }
     sceneOne();
     scoreCount();
+    if(!bgStart){
+      traffic.play();
+      traffic.loop();
+      bgStart = true;
+    }
   }
   
   if(num == 2) {
@@ -97,17 +125,42 @@ void draw() {
     scoreCount();
   }
   
+  //EGG HARBOR
   if(num == 7) {
+    traffic.stop();
+    sceneChange();
+    if(!bgStart){
+      restaurantNoiseOne.play();
+      restaurantNoiseOne.loop();
+      bgStart = true;
+    }
+    
     sceneSeven();
     scoreCount();
   }
   
+  //MCDONALDS
   if(num == 8) {
+    traffic.stop();
+    sceneChange();
+    if(!bgStart){
+      restaurantNoiseTwo.play();
+      restaurantNoiseTwo.loop();
+      bgStart = true;
+    }
     sceneEight();
     scoreCount();
   }
   
+  //OUTSIDE AGAIN
   if(num == 9) {
+    restaurantNoiseOne.stop();
+    restaurantNoiseTwo.stop();
+    if(bgStart){
+      traffic.play();
+      traffic.loop();
+      bgStart = false;
+    }
     finalScene();
     scoreCount();
   }
@@ -193,6 +246,8 @@ void keyPressed() {
   //PRESS BACKSPACE TO RESTART THE GAME
   if(key == 8) {
     num = 1;
+    score = 0;
+    duckMove = 150;
   }
 
 }
@@ -353,4 +408,12 @@ void finalScene() {
     quote.finalThree();
   }
   
+}
+
+void sceneChange(){
+  if(sceneChanged  == false){
+  bgStart = false;
+  musicStopped = false;
+  sceneChanged = true;
+  }
 }
