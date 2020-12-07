@@ -125,7 +125,7 @@ void finalOne() {
   fill(0);
   textSize(24);
   text("Of course. Let's be friends! Maybe you can show me around?", 150, 880);
-  text("(Press DEL to play again)", 250, 920);
+  text("(Press backspace to play again)", 250, 920);
 }
 
 void finalTwo() {
@@ -133,7 +133,7 @@ void finalTwo() {
   textSize(24);
   text("I'm going to be a little busy. I'll let you know when we can", 120, 880);
   text("see each other again.", 300, 920);
-  text("(Press DEL to play again)", 300, 960);
+  text("(Press backspace to play again)", 300, 960);
 }
 
 void finalThree() {
